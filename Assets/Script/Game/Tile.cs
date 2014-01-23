@@ -3,52 +3,26 @@ using System.Collections;
 
 public class Tile : MonoBehaviour {
 	public GameObject myTile;
-	public MainLogic.TILETYPE myType;
-	public int myX,myY;
-	public int myHp;
-
+	public TileStatus myStatus;
 	private static tk2dSpriteCollectionData datas = (tk2dSpriteCollectionData)Resources.Load("Tiles Data/Tiles",typeof(tk2dSpriteCollectionData));
+	public static Vector3 Position(int y,int x){
+		return (new Vector3((float)(x*3.5-10.5f),(float)(y*3.5-10.5f),(float)(100.0f)));
+	}
 
-	public void newTile(int x,int y,MainLogic l){
-		myTile = new GameObject("Tile ("+x+","+y+")");
+	public Tile(int y,int x,MainLogic l){
+		myTile = new GameObject("Tile ("+y+","+x+")");
 		myTile.AddComponent<tk2dSprite>();
 		myTile.gameObject.transform.parent = l.transform;
-		//myTile.transform.localScale = new Vector3(2,2,1);
-		setScale(2.5f);
-		setType();
+		myStatus = new TileStatus(y,x);
+		SetTileByStatus();
+	}
 
-		myHp = 0;
-		setHp(1);
-
-		setTile(x,y);
-		myX = x;
-		myY = y;
+	public void SetTileByStatus(){
+		SetPosition (myStatus.myY,myStatus.myX);
+		SetImage (myStatus.myType);
+		SetScale (0.9f);
 	}
-	public void setHp(int addHp){
-		myHp += addHp;
-	}
-	public void setScale(float x){
-		myTile.transform.localScale = new Vector3(x,x,1);
-	}
-	public void setType(){
-		int t;
-		do{
-			t = (int)(Random.value * 5.0f);
-		}while(t == 5);
-
-		switch(t){
-			case 0: myType = MainLogic.TILETYPE.Enemy; break;
-			case 1: myType = MainLogic.TILETYPE.Sword; break;
-			case 2: myType = MainLogic.TILETYPE.Wand; break;
-			case 3: myType = MainLogic.TILETYPE.Coin; break;
-			case 4: myType = MainLogic.TILETYPE.Potion; break;
-		}
-	}
-	public void setTile(int x,int y){
-		myTile.transform.localPosition = new Vector3(x*10-27,y*10-27,100);
-		setImage();
-	}
-	private void setImage(){
+	private void SetImage(MainLogic.TILETYPE myType){
 		tk2dSprite sprite = myTile.GetComponent<tk2dSprite>();
 		switch(myType){
 		case MainLogic.TILETYPE.Enemy:
@@ -67,5 +41,11 @@ public class Tile : MonoBehaviour {
 			sprite.SetSprite(datas,"Potion");
 			break;
 		}
+	}
+	public void SetScale(float x){
+		myTile.transform.localScale = new Vector3(x,x,1);
+	}
+	public void SetPosition(int y,int x){
+		myTile.transform.localPosition = Position (y,x);
 	}
 }
