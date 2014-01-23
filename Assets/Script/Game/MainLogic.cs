@@ -37,10 +37,14 @@ public class MainLogic : MonoBehaviour {
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit = new RaycastHit();
 				if(Physics.Raycast(ray, out hit)) {
+					if(touch.transform == hit.transform){
+						Application.LoadLevel(1);
+					}
 					foreach(Tile tiles in main_Tile){
 						if(tiles.myTile.transform == hit.transform){
 							TextMesh mesh = touch.GetComponent<TextMesh>();
 							mesh.text = "("+V2.y +","+V2.x+")";
+							mesh.text = UserData.Instance.Hp.ToString ();
 							Add(new Vector2(tiles.myStatus.myX,tiles.myStatus.myY));
 						}
 					}
@@ -153,7 +157,11 @@ public class MainLogic : MonoBehaviour {
 		tile.SetTileByStatus();
 		if(fallingCount == 0){
 			nowBreaking = false;
+			MonsterAttack();
 		}
+	}
+	public void MonsterAttack(){
+
 	}
 	private void Add(Vector2 newSelectedTile){
 		// Path ㅇㅔ ㅍㅛ ㅅㅣ!

@@ -11,7 +11,9 @@ public class TW_Start : MonoBehaviour {
 			RaycastHit hit = new RaycastHit();
 			if(Physics.Raycast(ray, out hit)) {
 				if(start.transform == hit.transform){
-					Application.LoadLevel(1);
+					Application.LoadLevel(2);
+					TextMesh mesh = start.GetComponent<TextMesh>();
+					mesh.text = Screen.height.ToString() +","+Screen.width.ToString();
 					Debug.Log ("OK");
 				}
 			}
