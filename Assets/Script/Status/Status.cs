@@ -48,7 +48,7 @@ public class Status : MonoBehaviour {
 
 
 		for (int i = 0; i < 10; i++) {
-			string text = System.IO.File.ReadAllText(""+ItemType[i]+".json");
+			string text = System.IO.File.ReadAllText("Assets/json/"+ItemType[i]+".json");
 			Items[i] = LitJson.JsonMapper.ToObject (text);
 			Debug.Log(i);
 		}
