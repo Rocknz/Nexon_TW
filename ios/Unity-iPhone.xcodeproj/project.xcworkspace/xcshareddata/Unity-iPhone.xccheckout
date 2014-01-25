@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F6F47B22-17E6-4C42-8833-540210DA6440</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Unity-iPhone</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E31D9C3A-676D-4DE2-BEAD-6418042EE27A</key>
+		<string>https://github.com/Rocknz/Nexon_TW.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ios/Unity-iPhone.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E31D9C3A-676D-4DE2-BEAD-6418042EE27A</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Rocknz/Nexon_TW.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E31D9C3A-676D-4DE2-BEAD-6418042EE27A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E31D9C3A-676D-4DE2-BEAD-6418042EE27A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Nexon_TW</string>
+		</dict>
+	</array>
+</dict>
+</plist>
