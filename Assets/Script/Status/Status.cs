@@ -62,27 +62,14 @@ public class Status : MonoBehaviour {
 		textMesh.text = "Seed : " + money.ToString ();
 
 		ViewTable = new GameObject[6];
-	//	MeshRenderer[] renderer = new MeshRenderer[5];
+	
 		for ( int i = 0 ; i < 6 ; i++ ) 
 			ViewTable[i] = GameObject.Find ("ViewTable"+(i+1).ToString());
 		ViewTable[4].transform.position = new Vector3(0,1,10); // NextItem table
 		ViewTable[5].transform.position = new Vector3(0,1,10); // Message table
 
-		//Debug.Log (Application.persistentDataPath);
-
-		for (int i = 0; i < 10; i++) {
-			TextAsset textAsset = Resources.Load("json/"+ItemType[i]) as TextAsset;
-			string text = textAsset.text;
-			//Debug.Log (text);
-			//string text = Resources.Load("json/"+ItemType[i]+".json").ToString ();
-			//string text = System.IO.File.ReadAllText(Application.dataPath+"/json/"+ItemType[i]+".json");
-			Items[i] = LitJson.JsonMapper.ToObject (text);
-		//	Debug.Log(i);
-		}
-		//showWindows ("asdf");
-
-//		for ( int i = 0 ; i < Items[0].Count ; i++ ) 
-//			Debug.Log (Items[ITEMTYPE.Sword][i]["name"]);
+	Items = ItemData.Instance.Items;
+	
 
 		for ( int i = 0 ; i < 4 ; i++ ) 
 			for ( int j = 0 ; j < 5 ; j++ ) 
@@ -93,7 +80,7 @@ public class Status : MonoBehaviour {
 			ViewNextItem[i] = GameObject.Find (ViewNextItemType[i]);
 		}
 
-
+		//showWindows ("Start Call!");
 		DrawItemTable ();
 	}
 	
@@ -153,11 +140,8 @@ public class Status : MonoBehaviour {
 				}
 			//	else if ( hit.collider.name == ViewTable[4].name )
 			//		ViewTable[4].transform.position = new Vector3(0,1,10);
-				Debug.Log (hit.collider.name);
+			//	Debug.Log (hit.collider.name);
             }
-            //if ( money - (1<<10) < 0 ) return ;
-			//money -= 1<<10;
-			//Debug.Log(money);
 
 			TextMesh textMesh = Money.GetComponent<TextMesh>();
 			textMesh.text = "Seed : "+money.ToString ();
