@@ -7,6 +7,7 @@ public class UserText : MonoBehaviour {
 	GameObject Hp;
 	GameObject Xien;
 	GameObject Coin;
+	GameObject DMG;
 	void Start(){
 		Atk = GameObject.Find ("Atk Gap");
 		Int = GameObject.Find ("Int Gap");
@@ -14,6 +15,7 @@ public class UserText : MonoBehaviour {
 		Hp = GameObject.Find ("Hp Gap");
 		Xien = GameObject.Find ("Xien Gap");
 		Coin = GameObject.Find ("Coin Gap");
+		DMG = GameObject.Find ("DMG Gap");
 		setStat();
 	}
 	public void setStat(){
@@ -29,6 +31,10 @@ public class UserText : MonoBehaviour {
 		Xien.GetComponent<tk2dTextMesh>().Commit();
 		Coin.GetComponent<tk2dTextMesh>().text = UserData.Instance.Coin.ToString();
 		Coin.GetComponent<tk2dTextMesh>().Commit();
+	}
+	public void setDMG(int Damage){
+		DMG.GetComponent<tk2dTextMesh>().text = Damage.ToString();
+		DMG.GetComponent<tk2dTextMesh>().Commit();
 	}
 	void Update(){
 

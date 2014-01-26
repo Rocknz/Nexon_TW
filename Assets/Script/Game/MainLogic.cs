@@ -30,9 +30,22 @@ public class MainLogic : MonoBehaviour {
 	}
 
 	// Update is called once per frame
+	void setDamage_now(int x){
+		if(x == 0){
+			// use Xien;
+			Damage_now = UserData.Instance.Xien + 1;
+		}
+		else if(x == 1){
+			Damage_now += UserData.Instance.Atk;
+		}
+		else if(x == -1){
+			Damage_now -= UserData.Instance.Atk;
+		}
+		GameObject.Find ("UserText").GetComponent<UserText>().setDMG (Damage_now);
+	}
 	void Update () {
 		if(PathStack.Count == 0){
-			Damage_now = UserData.Instance.Xien + 1;
+			setDamage_now(0);
 		}
 		if(!NowBreaking){
 //			if(Input.touchCount != 0){
@@ -56,6 +69,7 @@ public class MainLogic : MonoBehaviour {
 			else if(Input.GetButtonDown("Fire2")){
 				int count = PathStack.Count;
 				TILETYPE type = new TILETYPE();
+				bool isEnemyAttacked = false;
 				while(PathStack.Count != 0){
 					Vector2 now = (Vector2)PathStack.Pop();
 					int nx,ny;
@@ -67,12 +81,18 @@ public class MainLogic : MonoBehaviour {
 						   main_Tile[ny,nx].myStatus.myType == TILETYPE.Enemy) ){
 							type = main_Tile[ny,nx].myStatus.myType;
 						}
+						if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Enemy){
+							isEnemyAttacked = true;
+						}
 						main_Tile[ny,nx].myStatus.Attacked (Damage_now);
 					}
 					touch_Check[ny,nx] = false;
 				}
 				DestroyTile();
 				if(count >= 3){
+					if(isEnemyAttacked){
+						UserData.Instance.Xien = 0;
+					}
 					GameObject.Find ("ComboBox").GetComponent<ComboLogic>().AddCombo(type);
 					if(type == TILETYPE.Coin){
 						UserData.Instance.Coin += count;
@@ -232,7 +252,7 @@ public class MainLogic : MonoBehaviour {
 			PathStack.Push(newSelectedTile);
 			main_Tile[ny,nx].SetScale (0.4f);
 			if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
-				Damage_now += UserData.Instance.Atk;
+				setDamage_now(1);
 			}
 			touch_Check[ny,nx] = true;
 		}
@@ -250,7 +270,7 @@ public class MainLogic : MonoBehaviour {
 					PathStack.Push(newSelectedTile);
 					main_Tile[ny,nx].SetScale (0.4f);
 					if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
-						Damage_now += UserData.Instance.Atk;
+						setDamage_now(1);
 					}
 					touch_Check[ny,nx] = true;
 				}
@@ -264,7 +284,7 @@ public class MainLogic : MonoBehaviour {
 					dy = (int)delpath.y;
 					main_Tile[dy,dx].SetScale(0.9f);
 					if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
-						Damage_now -= UserData.Instance.Atk;
+						setDamage_now (-1);
 					}
 					touch_Check[dy,dx] = false;
 				}

@@ -6,7 +6,7 @@ public class ComboLogic : MonoBehaviour {
 	MainLogic.TILETYPE[] type = new MainLogic.TILETYPE[COMBO_LEN];
 	int length;
 	int complete;
-	void Start () {
+	void Start() {
 		int i;
 		for(i=0;i<COMBO_LEN;i++){
 			Combo[i] = new GameObject("Combo"+i.ToString());
