@@ -3,15 +3,20 @@ using System.Collections;
 
 public class UserData : MonoBehaviour {
 	private int mHp;
+	private int mHpMax;
+
+	private int mXien;
+	private int mXienMax;
+
 	private int mAtk;
 	private int mDef;
 	private int mInt;
 	private int mCoin;
+	
 	private int mHelmetLevel;
 	private int mHeadLevel;
 	private int mSwordLevel;
 	private int mBodyLevel;
-
 
 	// use instance -> UserData.Instance.Hp 
 
@@ -24,6 +29,18 @@ public class UserData : MonoBehaviour {
 	public int Hp{
 		get { return ins.mHp; }
 		set { mHp = value; }
+	}
+	public int HpMax{
+		get { return ins.mHpMax; }
+		set { mHpMax = value; }
+	}
+	public int Xien{
+		get { return ins.mXien; }
+		set { mXien = value; }
+	}
+	public int XienMax{
+		get { return ins.mXienMax; }
+		set { mXienMax = value; }
 	}
 	public int Atk{
 		get { return mAtk; }
@@ -64,6 +81,9 @@ public class UserData : MonoBehaviour {
 		//PlayerPrefs -> DataLoad and DataSave
 
 		ins.Hp = PlayerPrefs.GetInt ("Hp");
+		ins.HpMax = PlayerPrefs.GetInt ("HpMax");
+		ins.Xien = PlayerPrefs.GetInt ("Xien");
+		ins.XienMax = PlayerPrefs.GetInt ("XienMax");
 		ins.Atk = PlayerPrefs.GetInt ("Atk");
 		ins.Def = PlayerPrefs.GetInt ("Def");
 		ins.Int = PlayerPrefs.GetInt ("Int");
@@ -73,7 +93,11 @@ public class UserData : MonoBehaviour {
 		ins.SwordLevel = PlayerPrefs.GetInt ("SwordLevel");
 		ins.BodyLevel = PlayerPrefs.GetInt ("BodyLevel");
 
+		
 		PlayerPrefs.SetInt("Hp",20);
+		PlayerPrefs.SetInt("HpMax",20);
+		PlayerPrefs.SetInt("Xien",0);
+		PlayerPrefs.SetInt("XienMax",20);
 		PlayerPrefs.SetInt("Atk",10);
 		PlayerPrefs.SetInt("Def",10);
 		PlayerPrefs.SetInt("Int",10);

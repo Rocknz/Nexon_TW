@@ -4,31 +4,37 @@ using System.Collections;
 public class MainLogic : MonoBehaviour {
 	public enum TILETYPE{ Enemy, Sword, Wand, Potion, Coin};
 	public static int TILE_SIZE = 7; 
+	GameObject player;
+	Stack PathStack;
+	bool NowBreaking;
+	int FallingCount;
+	int Turn = 0;
+	int Damage_now = 0;
 
-	GameObject touch;
-	Stack pathStack;
-	bool nowBreaking;
-	int fallingCount;
 	// Use this for initialization
 	Tile[,] main_Tile = new Tile[TILE_SIZE,TILE_SIZE];
 	bool[,] touch_Check = new bool[TILE_SIZE,TILE_SIZE];
 
 	void Start () {
-		pathStack = new Stack();
-		touch = GameObject.Find ("Touch");
+		player = GameObject.Find ("Player");
+
+		PathStack = new Stack();
 		int i,j;
 		for(i=0;i<TILE_SIZE;i++){
 			for(j=0;j<TILE_SIZE;j++){
-				main_Tile[i,j] = new Tile(i,j,this);
+				main_Tile[i,j] = new Tile(i,j,GameObject.Find ("AllTiles"));
 				touch_Check[i,j] = false;
 			}
 		}
-		nowBreaking = false;
+		NowBreaking = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(!nowBreaking){
+		if(PathStack.Count == 0){
+			Damage_now = UserData.Instance.Xien + 1;
+		}
+		if(!NowBreaking){
 //			if(Input.touchCount != 0){
 //				Vector2 V2 = Input.GetTouch(0).position;
 //				Ray ray = Camera.main.ScreenPointToRay(new Vector3(V2.x,V2.y,0));
@@ -37,33 +43,48 @@ public class MainLogic : MonoBehaviour {
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit = new RaycastHit();
 				if(Physics.Raycast(ray, out hit)) {
-					if(touch.transform == hit.transform){
-						Application.LoadLevel(1);
+					if(player.transform == hit.transform){
+						Application.LoadLevel(3);
 					}
 					foreach(Tile tiles in main_Tile){
 						if(tiles.myTile.transform == hit.transform){
-							TextMesh mesh = touch.GetComponent<TextMesh>();
-							mesh.text = "("+V2.y +","+V2.x+")";
-							mesh.text = UserData.Instance.Hp.ToString ();
 							Add(new Vector2(tiles.myStatus.myX,tiles.myStatus.myY));
 						}
 					}
 				}
 			}
 			else if(Input.GetButtonDown("Fire2")){
-				int count = pathStack.Count;
-				while(pathStack.Count != 0){
-					Vector2 now = (Vector2)pathStack.Pop();
+				int count = PathStack.Count;
+				TILETYPE type = new TILETYPE();
+				while(PathStack.Count != 0){
+					Vector2 now = (Vector2)PathStack.Pop();
 					int nx,ny;
 					nx = (int)now.x;
 					ny = (int)now.y;
 					main_Tile[ny,nx].SetScale (0.9f);
 					if(count >= 3){
-						main_Tile[ny,nx].myStatus.SetHp (-1);
+						if(!(type == TILETYPE.Sword && 
+						   main_Tile[ny,nx].myStatus.myType == TILETYPE.Enemy) ){
+							type = main_Tile[ny,nx].myStatus.myType;
+						}
+						main_Tile[ny,nx].myStatus.Attacked (Damage_now);
 					}
 					touch_Check[ny,nx] = false;
 				}
 				DestroyTile();
+				if(count >= 3){
+					GameObject.Find ("ComboBox").GetComponent<ComboLogic>().AddCombo(type);
+					if(type == TILETYPE.Coin){
+						UserData.Instance.Coin += count;
+					}
+					else if(type == TILETYPE.Potion){
+						UserData.Instance.Hp += count;
+					}
+					else if(type == TILETYPE.Wand){
+						UserData.Instance.Xien += count;
+					}
+					GameObject.Find ("UserText").GetComponent<UserText>().setStat();
+				}
 			}
 		}
 	}
@@ -77,8 +98,17 @@ public class MainLogic : MonoBehaviour {
 				}
 			}
 		}
+
 		if(cnt != 0){
-			nowBreaking = true;
+			NowBreaking = true;
+
+			//MonsterAttackTurn.
+			for(i=0;i<TILE_SIZE;i++){
+				for(j=0;j<TILE_SIZE;j++){
+					main_Tile[i,j].myStatus.myTurn ++;
+				}
+			}
+
 			for(i=0;i<TILE_SIZE;i++){
 				for(j=0;j<TILE_SIZE;j++){
 					if(main_Tile[i,j].myStatus.myHp <= 0){
@@ -133,12 +163,12 @@ public class MainLogic : MonoBehaviour {
 				main_Tile[i,j].SetTileByStatus();
 			}
 		}
-		fallingCount = 0;
+		FallingCount = 0;
 		for(i=0;i<TILE_SIZE;i++){
 			for(j=0;j<TILE_SIZE;j++){
 				if(main_Tile[i,j].myStatus.myY != i){
 					main_Tile[i,j].myStatus.myY = i;
-					fallingCount ++;
+					FallingCount ++;
 					Vector3 v3 = Tile.Position(i,j);
 					iTween.MoveTo(main_Tile[i,j].myTile, iTween.Hash(
 						"x", v3.x,
@@ -153,28 +183,61 @@ public class MainLogic : MonoBehaviour {
 		}
 	}
 	public void FallingEnd(Tile tile){
-		fallingCount --;
+		FallingCount --;
 		tile.SetTileByStatus();
-		if(fallingCount == 0){
-			nowBreaking = false;
+		if(FallingCount == 0){
 			MonsterAttack();
 		}
 	}
 	public void MonsterAttack(){
+		// ㅁㅗㄴㅅㅡㅌㅓ ㄱㅗㅇㄱㅕㄱ
+		Turn ++;
+		FallingCount = 1;
 
+		int i,j;
+		for(i=0;i<TILE_SIZE;i++){
+			for(j=0;j<TILE_SIZE;j++){
+				if(main_Tile[i,j].myStatus.myType == TILETYPE.Enemy && 
+				   main_Tile[i,j].myStatus.myTurn != 0){
+
+					FallingCount ++;
+					iTween.ScaleFrom(main_Tile[i,j].myTile, iTween.Hash(
+						"x", 2.5f,
+						"y", 2.5f,
+						"easeType", "easeOutQuad",
+						"time", 0.5,
+						"oncomplete","MonsterAttackEnd",
+						"oncompletetarget",gameObject,
+						"oncompleteparams",main_Tile[i,j]));
+
+					UserData.Instance.Hp -= main_Tile[i,j].myStatus.myAttack;
+					GameObject.Find ("UserText").GetComponent<UserText>().setStat();
+				}
+			}
+		}
+		MonsterAttackEnd();
+	}
+	public void MonsterAttackEnd(){
+		FallingCount --;
+		if(FallingCount == 0){
+			NowBreaking = false;
+		}
 	}
 	private void Add(Vector2 newSelectedTile){
 		// Path ㅇㅔ ㅍㅛ ㅅㅣ!
 		int nx,ny;
 		ny = (int)newSelectedTile.y;
 		nx = (int)newSelectedTile.x;
-		if(pathStack.Count == 0){
-			pathStack.Push(newSelectedTile);
+		if(PathStack.Count == 0){
+			PathStack.Push(newSelectedTile);
 			main_Tile[ny,nx].SetScale (0.4f);
+			if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
+				Damage_now += UserData.Instance.Atk;
+			}
 			touch_Check[ny,nx] = true;
 		}
 		else{
-			Vector2 nowSelectedTile = (Vector2)pathStack.Peek();
+			Vector2 nowSelectedTile = (Vector2)PathStack.Peek();
 			int nx1,ny1;
 			nx1 = (int)nowSelectedTile.x;
 			ny1 = (int)nowSelectedTile.y;
@@ -184,19 +247,25 @@ public class MainLogic : MonoBehaviour {
 				                        main_Tile[ny1,nx1].myStatus.myType)){
 
 					// ㄱㅏㄹ ㅅㅜ ㅇㅣㅆ ㅇㅡㄹ ㄸㅐ.
-					pathStack.Push(newSelectedTile);
+					PathStack.Push(newSelectedTile);
 					main_Tile[ny,nx].SetScale (0.4f);
+					if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
+						Damage_now += UserData.Instance.Atk;
+					}
 					touch_Check[ny,nx] = true;
 				}
 			}
 			else{
 				//ㄱㅣㅈㅗㄴㅇㅔ ㅈㅗㄴㅈㅐ ㅎㅏㄴㄷㅏㅁㅕㄴ
-				while(!pathStack.Peek().Equals(newSelectedTile)){
-					Vector2 delpath = (Vector2)pathStack.Pop();
+				while(!PathStack.Peek().Equals(newSelectedTile)){
+					Vector2 delpath = (Vector2)PathStack.Pop();
 					int dx,dy;
 					dx = (int)delpath.x;
 					dy = (int)delpath.y;
 					main_Tile[dy,dx].SetScale(0.9f);
+					if(main_Tile[ny,nx].myStatus.myType == TILETYPE.Sword){
+						Damage_now -= UserData.Instance.Atk;
+					}
 					touch_Check[dy,dx] = false;
 				}
 			}

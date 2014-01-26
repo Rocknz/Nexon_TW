@@ -4,19 +4,22 @@ using System.Collections;
 public class TileStatus : MonoBehaviour {
 	public MainLogic.TILETYPE myType;
 	public int myX,myY;
-	public int myHp;
+	public int myHp,myArmor,myAttack;
+	public int myTurn;
 	public TileStatus(int y,int x){
 		// ㅅㅐㄹㅗ ㅅㅓㄴ ㅇㅓㄴ 
 		myY = y;
 		myX = x;
-
-		myHp = 0;
-		SetHp (1);
-		
+		myTurn = 0;
+		myHp = 1;
+		myAttack = 1;
+		myArmor = 0;
 		NewType ();
 	}
-	public void SetHp(int addHp){
-		myHp += addHp;
+	public void Attacked(int damage){
+		int setHp = damage - myArmor;
+		if(setHp < 0 )setHp = 0;
+		myHp -= setHp;
 	}
 	public void NewType(){
 		int t;
