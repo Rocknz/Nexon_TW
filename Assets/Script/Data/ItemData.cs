@@ -23,10 +23,7 @@ public class ItemData : MonoBehaviour {
 			string text = textAsset.text;
 			ins.mItems[i] = LitJson.JsonMapper.ToObject (text);
 		}
-
-
 		DontDestroyOnLoad(this);
-		Application.LoadLevel(1);
 	}
 	
 	// Update is called once per frame

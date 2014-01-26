@@ -108,7 +108,6 @@ public class UserData : MonoBehaviour {
 		PlayerPrefs.SetInt ("BodyLevel", 0);
 
 		DontDestroyOnLoad(this);	
-		Application.LoadLevel(1);
 	}
 
 	void Update () {
