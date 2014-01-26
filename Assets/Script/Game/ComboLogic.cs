@@ -12,7 +12,7 @@ public class ComboLogic : MonoBehaviour {
 			Combo[i] = new GameObject("Combo"+i.ToString());
 			Combo[i].AddComponent<tk2dSprite>();
 			Combo[i].transform.parent = this.transform;
-			Combo[i].transform.localPosition = new Vector3(i*3,0,0);
+			Combo[i].transform.localPosition = new Vector3(i*3.2f,0,0);
 		}
 		NewComboSetting();
 	}
@@ -29,6 +29,9 @@ public class ComboLogic : MonoBehaviour {
 				"oncompleteparams",Combo[complete]));
 
 			complete ++;
+		}
+		else{
+			NewComboSetting ();
 		}
 	}
 	void AddComboEnd(){
@@ -72,7 +75,7 @@ public class ComboLogic : MonoBehaviour {
 					sprite.SetSprite(Tile.datas,"Potion");
 					break;
 			}
-			Combo[i].transform.localScale = new Vector3(1,1,0);
+			Combo[i].transform.localScale = new Vector3(0.8f,0.8f,0);
 		}
 	}
 }
