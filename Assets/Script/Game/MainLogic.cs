@@ -48,12 +48,12 @@ public class MainLogic : MonoBehaviour {
 			setDamage_now(0);
 		}
 		if(!NowBreaking){
-//			if(Input.touchCount != 0){
-//				Vector2 V2 = Input.GetTouch(0).position;
-//				Ray ray = Camera.main.ScreenPointToRay(new Vector3(V2.x,V2.y,0));
-			if(Input.GetButtonDown("Fire1")){
-				Vector2 V2 = new Vector2(Input.mousePosition.x,Input.mousePosition.y);
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if(Input.touchCount != 0){
+				Vector2 V2 = Input.GetTouch(0).position;
+				Ray ray = Camera.main.ScreenPointToRay(new Vector3(V2.x,V2.y,0));
+//			if(Input.GetButtonDown("Fire1")){
+//				Vector2 V2 = new Vector2(Input.mousePosition.x,Input.mousePosition.y);
+//				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit = new RaycastHit();
 				if(Physics.Raycast(ray, out hit)) {
 					if(player.transform == hit.transform){
@@ -66,7 +66,8 @@ public class MainLogic : MonoBehaviour {
 					}
 				}
 			}
-			else if(Input.GetButtonDown("Fire2")){
+			else{
+			//else if(Input.GetButtonDown("Fire2")){
 				int count = PathStack.Count;
 				TILETYPE type = new TILETYPE();
 				bool isEnemyAttacked = false;
@@ -138,17 +139,15 @@ public class MainLogic : MonoBehaviour {
 							iTween.ScaleTo(main_Tile[i,j].myTile, iTween.Hash(
 								"x", 0,
 								"y", 0,
-								"easeType", "easeOutQuad",
-								"time", 1,
-								"delay", .1));
+								"easeType", "easeInCubic",
+								"time", 0.5f));
 						}
 						else{
 							iTween.ScaleTo(main_Tile[i,j].myTile, iTween.Hash(
 								"x", 0,
 								"y", 0,
-								"easeType", "easeOutQuad",
-								"time", 1,
-								"delay", .1,
+								"easeType", "easeInCubic",
+								"time", 0.5f,
 								"oncomplete","FallingTile",
 								"oncompletetarget",gameObject,
 								"oncompleteparams",main_Tile[i,j]));
