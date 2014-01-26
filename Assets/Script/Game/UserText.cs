@@ -36,7 +36,23 @@ public class UserText : MonoBehaviour {
 		DMG.GetComponent<tk2dTextMesh>().text = Damage.ToString();
 		DMG.GetComponent<tk2dTextMesh>().Commit();
 	}
-	void Update(){
+	void settingUserStatus(){
+		// ItemData
+//		UserData.Instance.Atk = ItemData.Instance.Items[0][UserData.Instance.SwordLevel]["hack_damage"]+
+//								ItemData.Instance.Items[7][UserData.Instance.HeadLevel]["hack_damage"];
+//
+//		UserData.Instance.Def = ItemData.Instance.Items[3][UserData.Instance.HelmetLevel]["def"]+
+//								ItemData.Instance.Items[8][UserData.Instance.BodyLevel]["def"];
+//
+//		UserData.Instance.Int = ItemData.Instance.Items[0][UserData.Instance.SwordLevel]["int_damage"]+
+//								ItemData.Instance.Items[7][UserData.Instance.HeadLevel]["int_damage"];
+//
+//		UserData.Instance.Hp = ItemData.Instance.Items[3][UserData.Instance.HelmetLevel]["HP"]+
+//								ItemData.Instance.Items[8][UserData.Instance.BodyLevel]["HP"];
 
+		setStat ();
+	}
+	void Update(){
+		settingUserStatus();
 	}
 }
