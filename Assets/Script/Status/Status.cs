@@ -68,10 +68,14 @@ public class Status : MonoBehaviour {
 		ViewTable[4].transform.position = new Vector3(0,1,10); // NextItem table
 		ViewTable[5].transform.position = new Vector3(0,1,10); // Message table
 
-		Debug.Log (Application.persistentDataPath);
+		//Debug.Log (Application.persistentDataPath);
 
 		for (int i = 0; i < 10; i++) {
-			string text = System.IO.File.ReadAllText(Application.dataPath+"/json/"+ItemType[i]+".json");
+			TextAsset textAsset = Resources.Load("json/"+ItemType[i]) as TextAsset;
+			string text = textAsset.text;
+			//Debug.Log (text);
+			//string text = Resources.Load("json/"+ItemType[i]+".json").ToString ();
+			//string text = System.IO.File.ReadAllText(Application.dataPath+"/json/"+ItemType[i]+".json");
 			Items[i] = LitJson.JsonMapper.ToObject (text);
 		//	Debug.Log(i);
 		}
